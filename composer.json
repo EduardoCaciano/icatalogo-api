@@ -1,0 +1,9 @@
+{
+    "name": "edu/icatalogo-api",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "App\\": "App"
+        }
+    }
+}
