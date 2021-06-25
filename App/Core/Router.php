@@ -13,8 +13,11 @@ class Router{
     private $params = [];
 
     function __construct(){
-
+        
         //setando no header do responde o content-hype
+        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+        header("Access-Control-Allow-Headers: Content-Type");
         header("content-type: application/json");
 
         //recuperar a url que está sendo acessada
@@ -75,16 +78,14 @@ class Router{
            break;
            
             case "PUT":
-           $this->controllerMethod = "update";
+                $this->controllerMethod = "update";
+                $this->getParams($url);
            break;
            
             case "DELETE":
            $this->controllerMethod = "delete";
-           break;
-           
-            default:
-           echo "Método não habilitado";
-           exit;
+           $this->getParams($url);
+            break;
            
         }
 
@@ -98,4 +99,13 @@ class Router{
         return explode("/", $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"]);
     }
 
+    private function getParams($url){
+        if(isset($url[2]) && is_numeric($url[2])){
+            $this->params = [$url[2]];
+        }else{
+            http_response_code(400); //400 bad request
+            echo json_encode(["erro" => "Parâmetro inválido"], JSON_UNESCAPED_UNICODE);
+            exit;
+        }
+    }
 }

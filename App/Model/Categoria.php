@@ -78,4 +78,24 @@ class Categoria{
         return $stmt->execute();
 
     }
+
+    public function getProdutos(){
+
+        $sql = " SELECT p.* FROM tbl_categoria c
+                INNER JOIN tbl_produto p ON p.categoria_id = c.id
+                WHERE c.id = ? ";
+
+        $stmt = Model::getConexao()->prepare($sql);
+        $stmt->bindValue(1, $this->id);
+
+        $stmt->execute();
+        
+        if($stmt->rowCount() > 0){
+            $resultado = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+            return $resultado;
+        }else{
+            return [];
+        }
+    }
 }
